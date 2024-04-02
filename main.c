@@ -19,6 +19,12 @@ enum RETURN_CODES {
     and recurse only on the second subarray. The absorbing happens immediately,
     so there is no left subarray to keep track of.
 
+    Note that negative asteroid masses aren't filtered out and would decrease
+    the planet's mass, possibly leading to a reported failure, when we could
+    absorb positive masses first and possibly succeed.
+    Ex: mass = 10, asteroids = [-10, 5]. We can absorb 5 first to get 15, then
+    -10 to get 5. If we absorb -10 first, we have 0 mass and can't absorb the 5.
+
     TODO: Benchmark if it is faster to absorb asteroids after the first loop
     ends, using a dedicated for loop since that can be vectorized.
 */
