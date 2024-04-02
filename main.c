@@ -14,7 +14,7 @@ enum RETURN_CODES {
 
 
 
-/* Solution for problem Leetcode 2126.
+/* Solution for problem LeetCode 2126.
     This is similar to quicksort, but we absorb asteroids in the left subarray
     and recurse only on the second subarray. The absorbing happens immediately,
     so there is no left subarray to keep track of.

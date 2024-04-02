@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Testing script for problem Leetcode 2126 Destroying Asteroids
+# Testing script for problem LeetCode 2126 Destroying Asteroids
 # An improved setup would report the label for the failed tests.
 # There isn't a need for checking of return codes, such as error codes, for now.
 
