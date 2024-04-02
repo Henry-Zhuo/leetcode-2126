@@ -5,9 +5,11 @@
 
 
 
-enum ERROR_CODES {
+enum RETURN_CODES {
+    SUCCESS = 0,
     FAIL_MEMORY_ALLOC_ERROR = -1,
     INCORRECT_ARG_COUNT_ERROR = -2,
+    NOT_ENOUGH_ASTEROIDS_ERROR = -3,
 };
 
 
@@ -90,13 +92,14 @@ int main(int argc, char *argv[]) {
     int *asteroids;
     int asteroidsSize;
     bool result;
+    int return_code;
 
     // argc counts the program name as an argument, subtract 1 to get argument
     // count.
     if (argc - 1 != EXPECTED_ARGUMENT_COUNT) {
         fprintf(
             stderr,
-            "ERROR: Expected %d arguments, got %d.",
+            "ERROR: Expected %d arguments, got %d.\n",
             EXPECTED_ARGUMENT_COUNT,
             argc - 1
         );
@@ -108,7 +111,7 @@ int main(int argc, char *argv[]) {
     if (asteroids == NULL) {
         fprintf(
             stderr,
-            "ERROR: Cannot allocate memory to store %d asteroids",
+            "ERROR: Cannot allocate memory to store %d asteroids\n",
             asteroidsSize
         );
         return FAIL_MEMORY_ALLOC_ERROR;
@@ -130,23 +133,36 @@ int main(int argc, char *argv[]) {
     asteroids[asteroidsProcessed] = atoi(asteroidsSequence + lastCommaIdx + 1);
     asteroidsProcessed++;
 
+    if (asteroidsProcessed < asteroidsSize) {
+        fprintf(
+            stderr,
+            "ERROR: Not enough asteroids, was told there should be %d asteroids but only %d were given.\n",
+            asteroidsSize,
+            asteroidsProcessed
+        );
+        return_code = NOT_ENOUGH_ASTEROIDS_ERROR;
+        goto cleanup;
+    }
     if (asteroidsSize > asteroidsProcessed) {
         fprintf(
             stderr,
-            "WARN: Was told there should be %d asteroids but only %d were given.",
-            asteroidsProcessed,
-            asteroidsSize
+            "WARN: Was told there should be %d asteroids but %d were given.\n",
+            asteroidsSize,
+            asteroidsProcessed
         );
         asteroidsSize = asteroidsProcessed;
     }
 
     mass = atoi(argv[PLANET_MASS_IDX]);
 
+    int expected_result = atoi(argv[EXPECTED_RESULT_IDX]);
     result = asteroidsDestroyed(mass, asteroids, asteroidsSize);
+    // Ensure 0 is returned if result is as expected, 1 if not
+    return_code = 1 - (result == expected_result) % expected_result;
 
     // Cleanup
+cleanup:
     free(asteroids);
 
-    int expected_result = atoi(argv[EXPECTED_RESULT_IDX]);
-    return result == expected_result;
+    return return_code;
 }
