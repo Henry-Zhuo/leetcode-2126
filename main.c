@@ -75,6 +75,7 @@ bool asteroidsDestroyed(int mass, int* asteroids, int asteroidsSize) {
     Ex: `a 10 6 2,7,12,33,10,6` is testing planet mass of 10, and 6 asteroids
     with mass 2, 7, 12, 33, 10, and 6. `a` is the name of the compiled
     program. Extra asteroids in the sequence are ignored and give a warning.
+    The last number shouldn't have a comma after it.
 */
 int main(int argc, char *argv[]) {
     const int EXPECTED_ARGUMENT_COUNT = 3;
@@ -113,16 +114,19 @@ int main(int argc, char *argv[]) {
     asteroidsSequence = argv[ASTEROIDS_MASS_SEQUENCE_IDX];
     int lastCommaIdx = -1;
     int asteroidsProcessed = 0;
-    for (int i = 0; asteroidsSequence[i] != '\n'; i++) {
+    for (int i = 0; asteroidsSequence[i] != '\0'; i++) {
         if (asteroidsSequence[i] == ',') {
             // Mutating input string since we won't be reusing it.
             // We split comma separated numbers into their own string in place.
             asteroidsSequence[i] = '\0';
             asteroids[asteroidsProcessed] = atoi(asteroidsSequence + lastCommaIdx + 1);
-            lastCommaIdx = i;
             asteroidsProcessed++;
+            lastCommaIdx = i;
         }
     }
+    asteroids[asteroidsProcessed] = atoi(asteroidsSequence + lastCommaIdx + 1);
+    asteroidsProcessed++;
+
     if (asteroidsSize > asteroidsProcessed) {
         fprintf(
             stderr,
