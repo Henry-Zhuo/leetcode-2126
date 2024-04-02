@@ -71,17 +71,20 @@ bool asteroidsDestroyed(int mass, int* asteroids, int asteroidsSize) {
 /* Testing and commandline interface for asteroidsDestroyed()
 
     When using commandline arguments, we expect the planet mass, the asteroid
-    count, then the asteroid masses given as a comma seperated sequence.
-    Ex: `a 10 6 2,7,12,33,10,6` is testing planet mass of 10, and 6 asteroids
-    with mass 2, 7, 12, 33, 10, and 6. `a` is the name of the compiled
-    program. Extra asteroids in the sequence are ignored and give a warning.
-    The last number shouldn't have a comma after it.
+    count, the asteroid masses given as a comma seperated sequence, then the
+    expected result.
+    Ex: `a 10 6 2,7,12,33,10,6 0` is testing planet mass of 10, and 6 asteroids
+    with mass 2, 7, 12, 33, 10, and 6, and an expected result of 0. `a` is the
+    name of the compiled program. Extra asteroids in the sequence are ignored
+    and give a warning. The last number in sequences shouldn't have a comma
+    after it.
 */
 int main(int argc, char *argv[]) {
-    const int EXPECTED_ARGUMENT_COUNT = 3;
+    const int EXPECTED_ARGUMENT_COUNT = 4;
     const int PLANET_MASS_IDX = 1;
     const int ASTEROID_COUNT_IDX = 2;
     const int ASTEROIDS_MASS_SEQUENCE_IDX = 3;
+    const int EXPECTED_RESULT_IDX = 4;
     char *asteroidsSequence;
     int mass;
     int *asteroids;
@@ -95,7 +98,7 @@ int main(int argc, char *argv[]) {
             stderr,
             "ERROR: Expected %d arguments, got %d.",
             EXPECTED_ARGUMENT_COUNT,
-            argc
+            argc - 1
         );
         return INCORRECT_ARG_COUNT_ERROR;
     }
@@ -144,5 +147,6 @@ int main(int argc, char *argv[]) {
     // Cleanup
     free(asteroids);
 
-    return result;
+    int expected_result = atoi(argv[EXPECTED_RESULT_IDX]);
+    return result == expected_result;
 }
