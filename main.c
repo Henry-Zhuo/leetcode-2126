@@ -29,7 +29,7 @@ enum RETURN_CODES {
     ends, using a dedicated for loop since that can be vectorized.
 */
 bool asteroidsDestroyed(long long int mass, int* asteroids, int asteroidsSize) {
-    bool swapped = false;
+    bool swapped;
     int rightSubarrayStartIdx;
     int scanRightSideIdx = asteroidsSize - 1;
 
@@ -38,6 +38,8 @@ bool asteroidsDestroyed(long long int mass, int* asteroids, int asteroidsSize) {
             // Can absorb asteroid
             mass += asteroids[rightSubarrayStartIdx];
         } else {
+            swapped = false;
+
             for ( ; scanRightSideIdx > rightSubarrayStartIdx; scanRightSideIdx--) {
                 if (mass >= asteroids[scanRightSideIdx]) {
                     mass += asteroids[scanRightSideIdx];
