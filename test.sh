@@ -27,6 +27,12 @@ TEST_CASES=(
     "10 1 200 0"
     # Can absorb single asteroid
     "10 1 2 1"
+    # Can absorb, need multiple swaps in a single recursive call with asteroid after first swap
+    "10 8 1,20,2,30,10,10,40,10 1"
+    # Can absorb, need to swap last 2
+    "10 6 1,2,3,4,25,6 1"
+    # Can't absorb even after a swap
+    "10 6 1,2,3,4,200,6 0"
 
     # Bad input tests
     # Not enough arguments
