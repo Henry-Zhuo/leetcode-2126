@@ -1,6 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+
+
+
+enum ERROR_CODES {
+    FAIL_MEMORY_ALLOC_ERROR = -1,
+    INCORRECT_ARG_COUNT_ERROR = -2,
+};
 
 
 
@@ -82,24 +90,24 @@ int main(int argc, char *argv[]) {
     // argc counts the program name as an argument, subtract 1 to get argument
     // count.
     if (argc - 1 != EXPECTED_ARGUMENT_COUNT) {
-        sprintf(
+        fprintf(
             stderr,
             "ERROR: Expected %d arguments, got %d.",
             EXPECTED_ARGUMENT_COUNT,
             argc
         );
-        return;
+        return INCORRECT_ARG_COUNT_ERROR;
     }
 
     asteroidsSize = atoi(argv[ASTEROID_COUNT_IDX]);
     asteroids = malloc(sizeof(int) * asteroidsSize);
     if (asteroids == NULL) {
-        sprintf(
+        fprintf(
             stderr,
             "ERROR: Cannot allocate memory to store %d asteroids",
             asteroidsSize
         );
-        return;
+        return FAIL_MEMORY_ALLOC_ERROR;
     }
 
     asteroidsSequence = argv[ASTEROIDS_MASS_SEQUENCE_IDX];
@@ -116,7 +124,7 @@ int main(int argc, char *argv[]) {
         }
     }
     if (asteroidsSize > asteroidsProcessed) {
-        sprintf(
+        fprintf(
             stderr,
             "WARN: Was told there should be %d asteroids but only %d were given.",
             asteroidsProcessed,
