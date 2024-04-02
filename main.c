@@ -14,7 +14,12 @@ enum RETURN_CODES {
 
 
 
-/* Submission for problem Leetcode 2126.
+static bool asteroidsDestroyedLongLong(long long int mass, int* asteroids, int asteroidsSize);
+static bool asteroidsDestroyed(int mass, int* asteroids, int asteroidsSize);
+
+
+
+/* Helper function for problem Leetcode 2126.
     This is similar to quicksort, but we absorb asteroids in the left subarray
     and recurse only on the second subarray. The absorbing happens immediately,
     so there is no left subarray to keep track of.
@@ -22,7 +27,7 @@ enum RETURN_CODES {
     TODO: Benchmark if it is faster to absorb asteroids after the first loop
     ends, using a dedicated for loop since that can be vectorized.
 */
-bool asteroidsDestroyed(int mass, int* asteroids, int asteroidsSize) {
+bool asteroidsDestroyedLongLong(long long int mass, int* asteroids, int asteroidsSize) {
     int rightSubarrayStartIdx;
     int scanRightSideIdx = asteroidsSize - 1;
 
@@ -66,6 +71,17 @@ bool asteroidsDestroyed(int mass, int* asteroids, int asteroidsSize) {
         asteroids + rightSubarrayStartIdx,
         asteroidsSize - rightSubarrayStartIdx
     );
+}
+
+
+
+/* Submission for problem Leetcode 2126
+    Using int input types because that's what Leetcode provides.
+*/
+bool asteroidsDestroyed(int mass, int* asteroids, int asteroidsSize) {
+    // Leetcode gives an error for integer overflow, use long long ints
+    long long int currentMass = mass;
+    return asteroidsDestroyedLongLong(currentMass, asteroids, asteroidsSize);
 }
 
 
